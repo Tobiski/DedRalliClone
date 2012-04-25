@@ -32,17 +32,20 @@ public class Game {
 		/* Initialize display */
 		try {
 				Display.setDisplayMode(new DisplayMode(winWidth, winHeight));
+				Display.setTitle("DedRalliClone v0.1");
 				Display.setFullscreen(isFullscreen);
 				Display.create();
 			} catch(LWJGLException e) {
-				System.exit(0);
+				System.exit(1);
 			}
 
 			GL11.glMatrixMode(GL11.GL_PROJECTION);
 			GL11.glLoadIdentity();
-			GL11.glOrtho(0, winWidth, 0, winHeight, 1, -1);
+			GL11.glOrtho(0, winWidth, winHeight, 0, 1, -1);
 			GL11.glDisable(GL11.GL_DEPTH_TEST);
 			GL11.glMatrixMode(GL11.GL_MODELVIEW);
+			GL11.glEnable(GL11.GL_BLEND);
+			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 	}
 	
 	private void gameLoop() {
