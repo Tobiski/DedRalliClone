@@ -63,7 +63,9 @@ public class MainMenu implements State {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		
 		text = new Text();
-		text.setText("ABBA", 500, 200);
+		text.setText("DED RALLI CLONE", 150, 100);
+		text.setText("NEW GAME", 200, 200);
+		text.setText("OPTIONS", 200, 300);
 	}
 	
 	@Override

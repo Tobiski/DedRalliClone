@@ -29,6 +29,10 @@ public class Alphabet {
 	private FloatBuffer vertexData;
 	private Vector2f position = new Vector2f();
 	
+	private float offsetX = 0.0625f;
+	private float offsetY = 0.0625f;
+	private char[] alphabets = new char[] {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', ' '};
+	
 	public Alphabet(char alphabet, float x, float y, int index, Texture texture) {
 		this.texture = texture;
 		
@@ -46,16 +50,24 @@ public class Alphabet {
 		vertexData.flip();
 				
 		FloatBuffer textureData = BufferUtils.createFloatBuffer(8);
-		if(alphabet == 'A') 
-			textureData.put(new float[]{0, 0,
-										0.0625f, 0,
-										0.0625f, 0.0625f,
-										0, 0.0625f});
-		if(alphabet == 'B') 
-			textureData.put(new float[]{0.0625f, 0,
-										0.125f, 0,
-										0.125f, 0.0625f,
-										0.0625f, 0.0625f});
+		
+		for(int counter = 0, i = 0, j = 0; counter < alphabets.length; counter++) {
+			if(i == 10) {
+				j++;
+				i = 0;
+			}			
+			if(alphabet == alphabets[counter]) {
+				offsetX *= i;
+				offsetY *= j;
+				break;
+			}
+			i++;
+		}
+		
+		textureData.put(new float[]{offsetX, offsetY,
+									offsetX + 0.0625f, offsetY,
+									offsetX + 0.0625f, offsetY + 0.0625f,
+									offsetX, offsetY + 0.0625f});
 		textureData.flip();
 				
 		vboVertexHandle = glGenBuffers();
