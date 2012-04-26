@@ -64,7 +64,7 @@ public class MainMenu implements State {
 		
 		text = new Text();
 		text.setText("Version 0123456789", 150, 50);
-		text.setText("DED RALLI CLONE", 150, 100);
+		text.setText("Ded Ralli Clone", 150, 100);
 		text.setText("New Game", 200, 200);
 		text.setText("Options", 200, 300);
 	}
