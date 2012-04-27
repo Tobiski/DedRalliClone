@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.nio.FloatBuffer;
 
 import org.lwjgl.BufferUtils;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
@@ -71,7 +72,8 @@ public class MainMenu implements State {
 	
 	@Override
 	public void pollInput() {
-
+		if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))
+			Game.running = false;
 	}
 
 	@Override

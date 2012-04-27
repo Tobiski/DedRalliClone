@@ -9,9 +9,9 @@ import org.lwjgl.opengl.GL11;
 
 public class Game {
 	
-	private boolean running;
-	public static int winWidth = 800;
-	public static int winHeight = 600;
+	public static boolean running;
+	public static int winWidth = Display.getDesktopDisplayMode().getWidth();
+	public static int winHeight = Display.getDesktopDisplayMode().getHeight();
 	public static boolean isFullscreen = true;
 	public int stateIndex = 0;
 	
@@ -31,9 +31,11 @@ public class Game {
 	private void init() {
 		/* Initialize display */
 		try {
-				Display.setDisplayMode(new DisplayMode(winWidth, winHeight));
+				if(!isFullscreen)
+					Display.setDisplayMode(new DisplayMode(winWidth, winHeight));
+				else
+					Display.setFullscreen(isFullscreen);					
 				Display.setTitle("DedRalliClone v0.1");
-				Display.setFullscreen(isFullscreen);
 				Display.create();
 			} catch(LWJGLException e) {
 				System.exit(1);
