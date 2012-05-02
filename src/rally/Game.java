@@ -9,10 +9,17 @@ import org.lwjgl.opengl.GL11;
 
 public class Game {
 	
+<<<<<<< HEAD
 	private static boolean running;
 	public static int winWidth = 1280;
 	public static int winHeight = 1024;
 	public static boolean isFullscreen = false;
+=======
+	public static boolean running;
+	public static int winWidth = Display.getDesktopDisplayMode().getWidth();
+	public static int winHeight = Display.getDesktopDisplayMode().getHeight();
+	public static boolean isFullscreen = true;
+>>>>>>> 8e1b7faa29243b96ac2422dfd319416878961403
 	public int stateIndex = 0;
 	
 	private State currentState;
@@ -35,6 +42,7 @@ public class Game {
 	private void init() {
 		/* Initialize display */
 		try {
+<<<<<<< HEAD
 				if(isFullscreen) {
 					Display.setDisplayModeAndFullscreen(Display.getDesktopDisplayMode());
 					Display.setFullscreen(isFullscreen);
@@ -42,6 +50,12 @@ public class Game {
 				else {
 					Display.setDisplayMode(new DisplayMode(winWidth, winHeight));
 				}
+=======
+				if(!isFullscreen)
+					Display.setDisplayMode(new DisplayMode(winWidth, winHeight));
+				else
+					Display.setFullscreen(isFullscreen);					
+>>>>>>> 8e1b7faa29243b96ac2422dfd319416878961403
 				Display.setTitle("DedRalliClone v0.1");
 				Display.create();
 			} catch(LWJGLException e) {

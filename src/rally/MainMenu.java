@@ -73,7 +73,11 @@ public class MainMenu implements State {
 	@Override
 	public void pollInput() {
 		if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))
+<<<<<<< HEAD
 			Game.endGame();
+=======
+			Game.running = false;
+>>>>>>> 8e1b7faa29243b96ac2422dfd319416878961403
 	}
 
 	@Override
