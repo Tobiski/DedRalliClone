@@ -13,6 +13,10 @@ public class Text {
 	private ArrayList<Alphabet> textList = new ArrayList<Alphabet>();
 	
 	public Text() {
+
+	}
+	
+	public void init() {
 		try {
 			texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/images/ascii.png"));
 		} catch (IOException e) {

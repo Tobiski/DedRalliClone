@@ -6,7 +6,6 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 
 public class Game {
-	
 	public static int winWidth = 1280;
 	public static int winHeight = 1024;
 	public static boolean isFullscreen = false;
@@ -33,19 +32,19 @@ public class Game {
 	private void init() {
 		/* Initialize display */
 		try {
-				if(isFullscreen) {
-					Display.setDisplayModeAndFullscreen(Display.getDesktopDisplayMode());
-					Display.setFullscreen(isFullscreen);
-				}
-				else {
-					Display.setDisplayMode(new DisplayMode(winWidth, winHeight));
-				}
-
-				Display.setTitle("DedRalliClone v0.1");
-				Display.create();
-			} catch(LWJGLException e) {
-				System.exit(1);
+			if(isFullscreen) {
+				Display.setDisplayModeAndFullscreen(Display.getDesktopDisplayMode());
+				Display.setFullscreen(isFullscreen);
 			}
+			else {
+				Display.setDisplayMode(new DisplayMode(winWidth, winHeight));
+			}
+
+			Display.setTitle("DedRalliClone v0.1");
+			Display.create();
+		} catch(LWJGLException e) {
+			System.exit(1);
+		}
 
 			GL11.glMatrixMode(GL11.GL_PROJECTION);
 			GL11.glLoadIdentity();
@@ -70,5 +69,6 @@ public class Game {
 				running = false;
 		}
 		Display.destroy();
+		System.exit(0);
 	}
 }

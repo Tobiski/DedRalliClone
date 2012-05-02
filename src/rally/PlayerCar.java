@@ -21,4 +21,8 @@ public class PlayerCar extends Entity {
 	public void right(boolean right) {
 		this.right = right;
 	}
+	
+	public void update() {
+		
+	}
 }

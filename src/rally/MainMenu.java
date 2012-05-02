@@ -25,45 +25,18 @@ import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
 
 public class MainMenu implements State {
-	Texture background;
-	final int amountOfVertices = 4;
-	final int vertexSize = 3;
-	int vboVertexHandle;
-	int vboTextureHandle;
-	Text text;
+	private Text text = new Text();
+	private Picture bg = new Picture();
 	
 	public MainMenu() {
 	}
 	
 	public void init() {
-		try {		
-			background = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/images/mainMenu.png"));			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		FloatBuffer vertexData = BufferUtils.createFloatBuffer(amountOfVertices * vertexSize);
-		vertexData.put(new float[]{ 0f, 0f, 0,
-									Game.winWidth, 0f, 0f,
-									Game.winWidth, Game.winHeight, 0f,
-									0f, Game.winHeight, 0f });
-		vertexData.flip();
+		bg.init("res/images/mainMenu.png");
+		bg.setAsBackground();
+		bg.writeDataToBuffer();
 		
-		FloatBuffer textureData = BufferUtils.createFloatBuffer(8);
-		textureData.put(new float[]{0, 0, 1, 0, 1, 1, 0, 1});
-		textureData.flip();
-		
-		vboVertexHandle = glGenBuffers();
-		glBindBuffer(GL_ARRAY_BUFFER, vboVertexHandle);
-		glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		
-		vboTextureHandle = glGenBuffers();
-		glBindBuffer(GL_ARRAY_BUFFER, vboTextureHandle);
-		glBufferData(GL_ARRAY_BUFFER, textureData, GL_STATIC_DRAW);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		
-		text = new Text();
+		text.init();
 		text.setText("Version 0123456789", 150, 50);
 		text.setText("Ded Ralli Clone", 150, 100);
 		text.setText("New Game", 200, 200);
@@ -83,27 +56,7 @@ public class MainMenu implements State {
 
 	@Override
 	public void draw() {
-		glClear(GL_COLOR_BUFFER_BIT);
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
-		
-		background.bind();
-		
-		glBindBuffer(GL_ARRAY_BUFFER, vboVertexHandle);
-		glVertexPointer(3, GL_FLOAT, 0, 0L);
-
-		glBindBuffer(GL_ARRAY_BUFFER, vboTextureHandle);
-		GL11.glTexCoordPointer(2, GL_FLOAT, 0, 0L);
-		
-		glDrawArrays(GL11.GL_QUADS, 0, amountOfVertices);
-
-		glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
-		glDisableClientState(GL_VERTEX_ARRAY);
-		
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		
+		bg.draw();
 		text.draw();
 	}
 

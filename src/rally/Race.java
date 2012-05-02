@@ -13,7 +13,7 @@ public class Race implements State {
 	Options options = new Options();
 	Pause pause = new Pause();
 
-	private int numberOfTiles = 100;
+	private final int numberOfTiles = 100;
 	
 	private ArrayList<String> levelTilesString = new ArrayList<String>();
 	private ArrayList<LevelTile> levelTiles = new ArrayList<LevelTile>();
@@ -28,23 +28,32 @@ public class Race implements State {
 			
 		    if (Keyboard.getEventKeyState()) {
 		        if (Keyboard.getEventKey() == Keyboard.KEY_UP) {
-		        	pCar.up = true;
+		        	pCar.up(true);
 		        }
 		        if (Keyboard.getEventKey() == Keyboard.KEY_DOWN) {
-		        	pCar.down = true;
+		        	pCar.down(true);
 		        }
 		        if (Keyboard.getEventKey() == Keyboard.KEY_LEFT) {
-		        	pCar.up = true;
+		        	pCar.left(true);
 		        }
 		        if (Keyboard.getEventKey() == Keyboard.KEY_RIGHT) {
-		        	pCar.up = true;
+		        	pCar.right(true);
 		        }
 				if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))
 					Game.endGame();
 		    }
 		    else {
-		        if (Keyboard.getEventKey() == Keyboard.KEY_A) {
-		        	System.out.println("A Key Released");
+		        if (Keyboard.getEventKey() == Keyboard.KEY_UP) {
+		        	pCar.up(false);
+		        }
+		        if (Keyboard.getEventKey() == Keyboard.KEY_DOWN) {
+		        	pCar.down(false);
+		        }
+		        if (Keyboard.getEventKey() == Keyboard.KEY_LEFT) {
+		        	pCar.left(false);
+		        }
+		        if (Keyboard.getEventKey() == Keyboard.KEY_RIGHT) {
+		        	pCar.right(false);
 		        }
 		    }
 		}
@@ -101,8 +110,5 @@ public class Race implements State {
 	@Override
 	public void init() {		
 		generateLevel(0);
-		
-		/* Create player car */
-		
 	}
 }
