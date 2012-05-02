@@ -9,10 +9,10 @@ import org.lwjgl.opengl.GL11;
 
 public class Game {
 	
-	private boolean running;
-	public static int winWidth = 800;
-	public static int winHeight = 600;
-	public static boolean isFullscreen = true;
+	private static boolean running;
+	public static int winWidth = 1280;
+	public static int winHeight = 1024;
+	public static boolean isFullscreen = false;
 	public int stateIndex = 0;
 	
 	private State currentState;
@@ -23,17 +23,26 @@ public class Game {
 	
 	public Game() {
 		running = true;
-		currentState = menu;
+		currentState = race;
 		init();
 		gameLoop();
+	}
+	
+	public static void endGame() {
+		running = false;
 	}
 
 	private void init() {
 		/* Initialize display */
 		try {
-				Display.setDisplayMode(new DisplayMode(winWidth, winHeight));
+				if(isFullscreen) {
+					Display.setDisplayModeAndFullscreen(Display.getDesktopDisplayMode());
+					Display.setFullscreen(isFullscreen);
+				}
+				else {
+					Display.setDisplayMode(new DisplayMode(winWidth, winHeight));
+				}
 				Display.setTitle("DedRalliClone v0.1");
-				Display.setFullscreen(isFullscreen);
 				Display.create();
 			} catch(LWJGLException e) {
 				System.exit(1);
@@ -50,6 +59,7 @@ public class Game {
 	
 	private void gameLoop() {
 		menu.init();
+		race.init();
 		while(running) {
 			currentState.pollInput();
 			currentState.update();

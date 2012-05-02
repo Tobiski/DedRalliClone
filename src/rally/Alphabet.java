@@ -23,7 +23,7 @@ public class Alphabet {
 	private Texture texture;
 	private final int amountOfVertices = 4;
 	private final int vertexSize = 3;
-	private int textureSize = 32;
+	private int textureSize = Game.winWidth / 64;
 	private int vboVertexHandle;
 	private int vboTextureHandle;
 	private FloatBuffer vertexData;
@@ -45,7 +45,7 @@ public class Alphabet {
 			position.x += textureSize * index;
 		
 		vertexData = BufferUtils.createFloatBuffer(amountOfVertices * vertexSize);
-		vertexData.put(new float[]{ position.x, position.y, 0, // TopLeft
+		vertexData.put(new float[]{ position.x, position.y, 0f, // TopLeft
 									textureSize + position.x, position.y, 0f, // TopRight
 									textureSize + position.x, textureSize + position.y, 0f, // BottomRight
 									position.x, textureSize + position.y, 0f }); // BottomLeft

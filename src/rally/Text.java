@@ -14,7 +14,7 @@ public class Text {
 	
 	public Text() {
 		try {
-			texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/ascii.png"));
+			texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/images/ascii.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
