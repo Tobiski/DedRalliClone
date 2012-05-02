@@ -17,14 +17,37 @@ public class Race implements State {
 	
 	private ArrayList<String> levelTilesString = new ArrayList<String>();
 	private ArrayList<LevelTile> levelTiles = new ArrayList<LevelTile>();
+	private PlayerCar pCar = new PlayerCar();
 	
 	public Race() {			
 	}
 
 	@Override
 	public void pollInput() {
-		if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))
-			Game.endGame();
+		while (Keyboard.next()) {
+			
+		    if (Keyboard.getEventKeyState()) {
+		        if (Keyboard.getEventKey() == Keyboard.KEY_UP) {
+		        	pCar.up = true;
+		        }
+		        if (Keyboard.getEventKey() == Keyboard.KEY_DOWN) {
+		        	pCar.down = true;
+		        }
+		        if (Keyboard.getEventKey() == Keyboard.KEY_LEFT) {
+		        	pCar.up = true;
+		        }
+		        if (Keyboard.getEventKey() == Keyboard.KEY_RIGHT) {
+		        	pCar.up = true;
+		        }
+				if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))
+					Game.endGame();
+		    }
+		    else {
+		        if (Keyboard.getEventKey() == Keyboard.KEY_A) {
+		        	System.out.println("A Key Released");
+		        }
+		    }
+		}
 	}
 
 	@Override
@@ -34,6 +57,7 @@ public class Race implements State {
 
 	@Override
 	public void draw() {
+		/* Draw background from road tiles */
 		for(int i = 0; i < levelTiles.size(); i++) {
 			levelTiles.get(i).draw();
 		}
@@ -44,14 +68,23 @@ public class Race implements State {
 		
 	}
 	
-	private void changeLevel() {
-		
-	}
-
-	@Override
-	public void init() {		
+	private void generateLevel(int newLevel) {
+		level = newLevel;
 		String str;
-		str = FileLoader.read("levels/level1.txt");
+		
+		/* Clear old level */
+		levelTiles.clear();
+		levelTilesString.clear();
+		
+		/* Generate new level */
+		switch(level) {
+			case 0: 
+				str = FileLoader.read("levels/level1.txt");
+				break;
+			default:
+				str = FileLoader.read("levels/level1.txt");
+		}
+
 		for(String tile : str.split(";", numberOfTiles)) {
 		levelTilesString.add(tile);
 		}
@@ -62,7 +95,14 @@ public class Race implements State {
 				i = 0;
 			}
 			levelTiles.add(new LevelTile(i, j, Integer.parseInt(levelTilesString.get(counter))));
-		}
+		}	
 	}
 
+	@Override
+	public void init() {		
+		generateLevel(0);
+		
+		/* Create player car */
+		
+	}
 }

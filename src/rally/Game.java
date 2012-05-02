@@ -1,7 +1,5 @@
 package rally;
 
-import java.util.Vector;
-
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
@@ -23,7 +21,7 @@ public class Game {
 	
 	public Game() {
 		running = true;
-		currentState = race;
+		currentState = menu;
 		init();
 		gameLoop();
 	}
