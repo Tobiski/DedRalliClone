@@ -1,10 +1,10 @@
 package rally;
 
 public class PlayerCar extends Entity {
-	private boolean left;
-	private boolean right;
-	private boolean down;
-	private boolean up;
+	public boolean left;
+	public boolean right;
+	public boolean down;
+	public boolean up;
 	
 	public void up(boolean up) {
 		this.up = up;

@@ -12,11 +12,11 @@ public class Game {
 	public static boolean running;
 	public int stateIndex = 0;
 	
-	private State currentState;
-	MainMenu menu = new MainMenu();
-	Race race = new Race();
-	Hiscore hiscore = new Hiscore();
-	Options options = new Options();
+	private static State currentState;
+	static MainMenu menu = new MainMenu();
+	static Race race = new Race();
+	static Hiscore hiscore = new Hiscore();
+	static Options options = new Options();
 	
 	public Game() {
 		running = true;
@@ -27,6 +27,13 @@ public class Game {
 	
 	public static void endGame() {
 		running = false;
+	}
+	
+	public static void changeState(int state) {
+		if(state == 2)
+			currentState = race;
+		else if(state == 0)
+			currentState = menu;
 	}
 
 	private void init() {
@@ -59,6 +66,7 @@ public class Game {
 		menu.init();
 		race.init();
 		while(running) {
+			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 			currentState.pollInput();
 			currentState.update();
 			currentState.draw();

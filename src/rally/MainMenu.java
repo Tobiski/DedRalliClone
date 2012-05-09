@@ -1,68 +1,97 @@
 package rally;
 
-import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
-import static org.lwjgl.opengl.GL11.GL_FLOAT;
-import static org.lwjgl.opengl.GL11.GL_VERTEX_ARRAY;
-import static org.lwjgl.opengl.GL11.glClear;
-import static org.lwjgl.opengl.GL11.glDisableClientState;
-import static org.lwjgl.opengl.GL11.glDrawArrays;
-import static org.lwjgl.opengl.GL11.glEnableClientState;
-import static org.lwjgl.opengl.GL11.glVertexPointer;
-import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
-import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
-import static org.lwjgl.opengl.GL15.glBindBuffer;
-import static org.lwjgl.opengl.GL15.glBufferData;
-import static org.lwjgl.opengl.GL15.glGenBuffers;
+import java.util.ArrayList;
 
-import java.io.IOException;
-import java.nio.FloatBuffer;
-
-import org.lwjgl.BufferUtils;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
-import org.newdawn.slick.opengl.Texture;
-import org.newdawn.slick.opengl.TextureLoader;
-import org.newdawn.slick.util.ResourceLoader;
 
-public class MainMenu implements State {
-	private Text text = new Text();
-	private Picture bg = new Picture();
+public class MainMenu extends Drawable implements State {
+	private ArrayList<Text> textList = new ArrayList<Text>();
+		
+	public static final int NEWGAME = 2;
+	public static final int OPTIONS = 3;
+	public static final int EXIT = 4;	
+
+	
+	private int menuChoice = NEWGAME;
 	
 	public MainMenu() {
-	}
-	
-	public void init() {
-		bg.init("res/images/mainMenu.png");
-		bg.setAsBackground();
-		bg.writeDataToBuffer();
-		
-		text.init();
-		text.setText("Version 0123456789", 150, 50);
-		text.setText("Ded Ralli Clone", 150, 100);
-		text.setText("New Game", 200, 200);
-		text.setText("Options", 200, 300);
+		offsetX = 0f;
+		offsetY = 0f;
+		staticOffset = 0;
+		isBackground = true;
 	}
 	
 	@Override
 	public void pollInput() {
-		if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))
-			Game.endGame();
+		while(Keyboard.next()) {
+			if(Keyboard.getEventKeyState()) {
+				if (Keyboard.getEventKey() == Keyboard.KEY_DOWN) {
+					menuChoice++;
+					if(menuChoice > 4)
+						menuChoice = 2;
+				}
+				if (Keyboard.getEventKey() == Keyboard.KEY_UP) {
+					menuChoice--;
+					if(menuChoice < 2)
+						menuChoice = 4;
+				}
+				if(Keyboard.getEventKey() == Keyboard.KEY_ESCAPE)
+					Game.endGame();
+				if(Keyboard.getEventKey() == Keyboard.KEY_RETURN) {
+					switch(menuChoice) {
+						case NEWGAME:
+							changeState();
+							break;
+						case OPTIONS:
+							System.out.println("OPTIONS!");
+							break;
+						case EXIT:
+							Game.endGame();
+							break;
+						default:
+							break;
+					}
+				}
+			}
+		}	
 	}
 
 	@Override
 	public void update() {
-
-	}
-
-	@Override
-	public void draw() {
-		bg.draw();
-		text.draw();
+		for(int i = 2; i < 5; i++) {
+			textList.get(i).setColor(new Color("White"));
+		}
+		textList.get(menuChoice).setColor(new Color("Red"));
 	}
 
 	@Override
 	public void changeState() {
-		
+			Game.changeState(menuChoice);
 	}
 
+	public void init() {
+		super.init("res/images/mainMenu.png");
+		
+		textList.add(new Text(new Color("Blue")));
+		textList.get(0).setText("Version 0 01", Game.winWidth-250, 10);
+		
+		textList.add(new Text(new Color("White")));
+		textList.get(1).setText("Ded Ralli Clone", Game.winWidth / 2 - 200, 100);
+		
+		textList.add(new Text(new Color("Red")));
+		textList.get(2).setText("New Game", Game.winWidth / 2, 300);
+
+		textList.add(new Text(new Color("White")));
+		textList.get(3).setText("Options", Game.winWidth / 2, 350);
+		
+		textList.add(new Text(new Color("White")));
+		textList.get(4).setText("Exit", Game.winWidth / 2, 400);
+	}
+	
+	public void draw() {
+		super.draw();
+		for(int i = 0; i < textList.size(); i++) {
+			textList.get(i).draw();
+		}
+	}
 }
