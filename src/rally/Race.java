@@ -40,7 +40,7 @@ public class Race implements State {
 		        	pCar.up = true;
 		        }
 				if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))
-					Game.endGame();
+					changeState();
 		    }
 		    else {
 		        if (Keyboard.getEventKey() == Keyboard.KEY_A) {
@@ -65,7 +65,7 @@ public class Race implements State {
 
 	@Override
 	public void changeState() {
-		
+		Game.changeState(0);
 	}
 	
 	private void generateLevel(int newLevel) {

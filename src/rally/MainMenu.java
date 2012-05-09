@@ -1,115 +1,97 @@
 package rally;
 
-import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
-import static org.lwjgl.opengl.GL11.GL_FLOAT;
-import static org.lwjgl.opengl.GL11.GL_VERTEX_ARRAY;
-import static org.lwjgl.opengl.GL11.glClear;
-import static org.lwjgl.opengl.GL11.glDisableClientState;
-import static org.lwjgl.opengl.GL11.glDrawArrays;
-import static org.lwjgl.opengl.GL11.glEnableClientState;
-import static org.lwjgl.opengl.GL11.glVertexPointer;
-import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
-import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
-import static org.lwjgl.opengl.GL15.glBindBuffer;
-import static org.lwjgl.opengl.GL15.glBufferData;
-import static org.lwjgl.opengl.GL15.glGenBuffers;
+import java.util.ArrayList;
 
-import java.io.IOException;
-import java.nio.FloatBuffer;
-
-import org.lwjgl.BufferUtils;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
-import org.newdawn.slick.opengl.Texture;
-import org.newdawn.slick.opengl.TextureLoader;
-import org.newdawn.slick.util.ResourceLoader;
 
-public class MainMenu implements State {
-	Texture background;
-	final int amountOfVertices = 4;
-	final int vertexSize = 3;
-	int vboVertexHandle;
-	int vboTextureHandle;
-	Text text;
+public class MainMenu extends Drawable implements State {
+	private ArrayList<Text> textList = new ArrayList<Text>();
+		
+	public static final int NEWGAME = 2;
+	public static final int OPTIONS = 3;
+	public static final int EXIT = 4;	
+	
+	private int menuChoice = NEWGAME;
 	
 	public MainMenu() {
-	}
-	
-	public void init() {
-		try {		
-			background = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/images/mainMenu.png"));			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		FloatBuffer vertexData = BufferUtils.createFloatBuffer(amountOfVertices * vertexSize);
-		vertexData.put(new float[]{ 0f, 0f, 0,
-									Game.winWidth, 0f, 0f,
-									Game.winWidth, Game.winHeight, 0f,
-									0f, Game.winHeight, 0f });
-		vertexData.flip();
-		
-		FloatBuffer textureData = BufferUtils.createFloatBuffer(8);
-		textureData.put(new float[]{0, 0, 1, 0, 1, 1, 0, 1});
-		textureData.flip();
-		
-		vboVertexHandle = glGenBuffers();
-		glBindBuffer(GL_ARRAY_BUFFER, vboVertexHandle);
-		glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		
-		vboTextureHandle = glGenBuffers();
-		glBindBuffer(GL_ARRAY_BUFFER, vboTextureHandle);
-		glBufferData(GL_ARRAY_BUFFER, textureData, GL_STATIC_DRAW);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		
-		text = new Text();
-		text.setText("Version 0123456789", 150, 50);
-		text.setText("Ded Ralli Clone", 150, 100);
-		text.setText("New Game", 200, 200);
-		text.setText("Options", 200, 300);
+		offsetX = 0f;
+		offsetY = 0f;
+		staticOffset = 0;
+		isBackground = true;
 	}
 	
 	@Override
 	public void pollInput() {
-		if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))
-			Game.endGame();
+		while(Keyboard.next()) {
+			if(Keyboard.getEventKeyState()) {
+				if (Keyboard.getEventKey() == Keyboard.KEY_DOWN) {
+					menuChoice++;
+					if(menuChoice > 4)
+						menuChoice = 2;
+				}
+				if (Keyboard.getEventKey() == Keyboard.KEY_UP) {
+					menuChoice--;
+					if(menuChoice < 2)
+						menuChoice = 4;
+				}
+				if(Keyboard.getEventKey() == Keyboard.KEY_ESCAPE)
+					Game.endGame();
+				if(Keyboard.getEventKey() == Keyboard.KEY_RETURN) {
+					switch(menuChoice) {
+						case NEWGAME:
+							changeState();
+							break;
+						case OPTIONS:
+							System.out.println("OPTIONS!");
+							break;
+						case EXIT:
+							Game.endGame();
+							break;
+						default:
+							break;
+					}
+				}
+			}
+		}	
 	}
 
 	@Override
 	public void update() {
-
-	}
-
-	@Override
-	public void draw() {
-		glClear(GL_COLOR_BUFFER_BIT);
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
-		
-		background.bind();
-		
-		glBindBuffer(GL_ARRAY_BUFFER, vboVertexHandle);
-		glVertexPointer(3, GL_FLOAT, 0, 0L);
-
-		glBindBuffer(GL_ARRAY_BUFFER, vboTextureHandle);
-		GL11.glTexCoordPointer(2, GL_FLOAT, 0, 0L);
-		
-		glDrawArrays(GL11.GL_QUADS, 0, amountOfVertices);
-
-		glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
-		glDisableClientState(GL_VERTEX_ARRAY);
-		
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		
-		text.draw();
+		for(int i = 2; i < 5; i++) {
+			textList.get(i).setColor(new Color("White"));
+		}
+		textList.get(menuChoice).setColor(new Color("Red"));
 	}
 
 	@Override
 	public void changeState() {
-		
+			Game.changeState(menuChoice);
 	}
 
+	@Override
+	public void init() {
+		super.init("res/images/mainMenu.png");
+		
+		textList.add(new Text(new Color("White")));
+		textList.get(0).setText("Version 0 01", Game.winWidth-250, 10);
+		
+		textList.add(new Text(new Color("White")));
+		textList.get(1).setText("Ded Ralli Clone", Game.winWidth / 2 - 200, 100);
+		
+		textList.add(new Text(new Color("Red")));
+		textList.get(2).setText("New Game", Game.winWidth / 2, 300);
+
+		textList.add(new Text(new Color("White")));
+		textList.get(3).setText("Options", Game.winWidth / 2, 350);
+		
+		textList.add(new Text(new Color("White")));
+		textList.get(4).setText("Exit", Game.winWidth / 2, 400);
+	}
+	
+	public void draw() {
+		super.draw();
+		for(int i = 0; i < textList.size(); i++) {
+			textList.get(i).draw();
+		}
+	}
 }
